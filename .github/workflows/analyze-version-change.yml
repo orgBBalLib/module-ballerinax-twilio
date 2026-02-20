@@ -59,14 +59,14 @@ jobs:
         run: |
           BRANCH_NAME="${{ steps.find_branch.outputs.branch_name }}"
 
-          # Generate diff between main and auto-generate-connector branches
-          echo "Generating diff between origin/main and origin/$BRANCH_NAME..."
+          # Generate diff between master and auto-generate-connector branches
+          echo "Generating diff between origin/master and origin/$BRANCH_NAME..."
 
           # Generate diff for client.bal
-          git diff origin/main..origin/$BRANCH_NAME -- ballerina/client.bal > client_diff.txt || true
+          git diff origin/master..origin/$BRANCH_NAME -- ballerina/client.bal > client_diff.txt || true
 
           # Generate diff for types.bal
-          git diff origin/main..origin/$BRANCH_NAME -- ballerina/types.bal > types_diff.txt || true
+          git diff origin/master..origin/$BRANCH_NAME -- ballerina/types.bal > types_diff.txt || true
 
           # Combine diffs
           cat client_diff.txt types_diff.txt > git_diff.txt
@@ -280,14 +280,14 @@ jobs:
             }
             prBody += `🔍 **Manual Review Required** - Please review the changes and approve if appropriate.\n`;
 
-            // Create PR with build status in title
+            // Create PR with build status in title - targeting master branch
             const buildStatus = gradleBuildFailed ? '[BUILD FAILED] ' : '';
             const pr = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `${buildStatus}[${analysis.changeType}] Auto-generated connector update - v${{ steps.update_version.outputs.new_version }}`,
               head: branchName,
-              base: 'main',
+              base: 'master',
               body: prBody
             });
 

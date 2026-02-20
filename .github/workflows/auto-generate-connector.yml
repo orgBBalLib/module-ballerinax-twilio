@@ -37,7 +37,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'analyze-version-change.yml',
-              ref: 'main'
+              ref: 'master'
             });
 
             console.log('Version analysis workflow triggered successfully!');
